@@ -2,12 +2,14 @@ import React from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle, Text} from 'react-native';
 import params from '../params';
 import Mine from './Mine';
+import Flag from './Flag';
 
 interface FieldProps {
   mined?: boolean;
   opened?: boolean;
   nearMines?: number;
   exploded?: boolean;
+  flagged?: boolean;
 }
 
 const Field: React.FC<FieldProps> = ({
@@ -15,6 +17,7 @@ const Field: React.FC<FieldProps> = ({
   opened = false,
   nearMines = 0,
   exploded = false,
+  flagged = false,
 }) => {
   const styleField: StyleProp<ViewStyle>[] = [styles.field];
 
@@ -52,6 +55,7 @@ const Field: React.FC<FieldProps> = ({
         false
       )}
       {mined && opened ? <Mine /> : false}
+      {flagged && !opened ? <Flag /> : false}
     </View>
   );
 };
