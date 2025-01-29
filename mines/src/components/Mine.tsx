@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
-const Mine: React.FC = ({}) => {
+const Mine = () => {
   return (
     <View style={styles.container}>
       <View style={styles.line} />
