@@ -1,22 +1,28 @@
 import React from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle, Text} from 'react-native';
 import params from '../params';
+import Mine from './Mine';
 
 interface FieldProps {
   mined?: boolean;
   opened?: boolean;
   nearMines?: number;
+  exploded?: boolean;
 }
 
 const Field: React.FC<FieldProps> = ({
   mined = false,
   opened = false,
   nearMines = 0,
+  exploded = false,
 }) => {
   const styleField: StyleProp<ViewStyle>[] = [styles.field];
 
   if (opened) {
     styleField.push(styles.opened);
+  }
+  if (exploded) {
+    styleField.push(styles.exploded);
   }
   if (styleField.length === 1) {
     styleField.push(styles.regular);
@@ -45,6 +51,7 @@ const Field: React.FC<FieldProps> = ({
       ) : (
         false
       )}
+      {mined && opened ? <Mine /> : false}
     </View>
   );
 };
@@ -71,6 +78,10 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: 'bold',
     fontSize: params.fontSize,
+  },
+  exploded: {
+    backgroundColor: 'red',
+    borderColor: 'red',
   },
 });
 
