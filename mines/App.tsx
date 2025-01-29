@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Field from './src/components/Field';
 
 function App(): React.JSX.Element {
@@ -29,19 +29,19 @@ function App(): React.JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
-        <View
-          style={styles.container}>
+        <View style={styles.container}>
           <Text style={styles.welcome}>Iniciando o Mines!!!</Text>
           <Text style={styles.instructions}>
             Tamanho da grade: {params.getRowsAmount()}x
             {params.getColumnsAmount()}
           </Text>
           <Field />
-          <Field  opened/>
-          <Field opened nearMines={7}/>
-          <Field mined/>
-          <Field opened mined exploded/>
+          <Field opened />
+          <Field opened nearMines={7} />
+          <Field mined />
+          <Field opened mined exploded />
+          <Field flagged />
+          <Field flagged opened/>
         </View>
       </ScrollView>
     </SafeAreaView>
