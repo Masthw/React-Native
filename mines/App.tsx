@@ -4,21 +4,14 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-
   StyleSheet,
-
   Text,
-
   useColorScheme,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  Header,
-} from 'react-native/Libraries/NewAppScreen';
-
-
+import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
+import Field from './src/components/Field';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -38,19 +31,30 @@ function App(): React.JSX.Element {
         style={backgroundStyle}>
         <Header />
         <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-            <Text style={styles.welcome}>Iniciando o Mines!!!</Text>
-            <Text style={styles.instructions}>Tamanho da grade: {params.getRowsAmount()}x{params.getColumnsAmount()}</Text>
-
-            </View>
+          style={styles.container}>
+          <Text style={styles.welcome}>Iniciando o Mines!!!</Text>
+          <Text style={styles.instructions}>
+            Tamanho da grade: {params.getRowsAmount()}x
+            {params.getColumnsAmount()}
+          </Text>
+          <Field />
+          <Field  opened/>
+          <Field opened nearMines={7}/>
+          <Field mined/>
+          <Field opened mined exploded/>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
   welcome: {
     marginTop: 32,
     paddingHorizontal: 24,
