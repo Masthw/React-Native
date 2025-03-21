@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, StyleProp, ViewStyle, Text} from 'react-native';
+import {View, StyleSheet, StyleProp, ViewStyle, Text, TouchableWithoutFeedback} from 'react-native';
 import params from '../params';
 import Mine from './Mine';
 import Flag from './Flag';
@@ -10,6 +10,7 @@ interface FieldProps {
   nearMines?: number;
   exploded?: boolean;
   flagged?: boolean;
+  onOpen?: () => void;
 }
 
 const Field: React.FC<FieldProps> = ({
@@ -18,6 +19,7 @@ const Field: React.FC<FieldProps> = ({
   nearMines = 0,
   exploded = false,
   flagged = false,
+  onOpen,
 }) => {
   const styleField: StyleProp<ViewStyle>[] = [styles.field];
 
@@ -48,7 +50,8 @@ const Field: React.FC<FieldProps> = ({
   }
 
   return (
-    <View style={styleField}>
+    <TouchableWithoutFeedback onPress={onOpen}>
+      <View style={styleField}>
       {!mined && opened && nearMines > 0 ? (
         <Text style={[styles.label, {color}]}>{nearMines}</Text>
       ) : (
@@ -56,7 +59,8 @@ const Field: React.FC<FieldProps> = ({
       )}
       {mined && opened ? <Mine /> : false}
       {flagged && !opened ? <Flag /> : false}
-    </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

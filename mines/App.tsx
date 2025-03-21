@@ -8,14 +8,17 @@ import {
   Text,
   useColorScheme,
   View,
+  Alert,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Minefield from './src/components/MineField';
-import { createMinedBoard } from './src/functions';
+import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines } from './src/functions';
 
 type GameState = {
   board: ReturnType<typeof createMinedBoard>;
+  won: boolean,
+  lost: boolean,
 };
 
 function App(): React.JSX.Element {
@@ -32,10 +35,28 @@ function App(): React.JSX.Element {
     const rows = params.getRowsAmount();
     return {
       board: createMinedBoard(rows, cols, minesAmount()),
+      won: false,
+      lost: false,
     };
   };
-
   const [gameState, setGameState] = useState<GameState>(createGameState);
+
+  const onOpenField = ( row: number, column: number) => {
+    const board = cloneBoard(gameState.board);
+    openField(board, row, column);
+    const lost = hadExplosion(board);
+    const won = wonGame(board);
+
+    if (lost) {
+      showMines(board);
+      Alert.alert('Perdeu');
+    }
+    if (won) {
+      Alert.alert('Parabéns', 'Você Venceu!');
+    }
+    setGameState({ board, lost, won });
+  };
+
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -56,7 +77,8 @@ function App(): React.JSX.Element {
             {params.getColumnsAmount()}
           </Text>
           <View style={styles.board}>
-            <Minefield board={gameState.board}/>
+            <Minefield board={gameState.board}
+            onOpenField={onOpenField}/>
           </View>
         </View>
       </ScrollView>

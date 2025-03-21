@@ -17,15 +17,17 @@ type Board = Cell[][];
 
 interface MinefieldProps {
   board: Board;
+  onOpenField: (row: number, column: number) => void;
 }
 
-const Minefield: React.FC<MinefieldProps> = ({ board }) => {
+const Minefield: React.FC<MinefieldProps> = ({ board, onOpenField }) => {
   return (
     <View style={styles.container}>
       {board.map((row, r) => (
         <View key={r} style={styles.row}>
           {row.map((field, c) => (
-            <Field {...field} key={`${r}-${c}`} />
+            <Field {...field} key={`${r}-${c}`}
+             onOpen={() => onOpenField(r, c)}/>
           ))}
         </View>
       ))}
