@@ -95,7 +95,7 @@ const openField = (board : Board, row : number, column : number): void => {
   }
 };
 
-const fields = (board : Board):Cell[] => board.flat();
+const fields = (board: Board):Cell[] => board.flat();
 const hadExplosion = (board: Board): boolean =>
   fields(board).some(field => field.exploded);
 const pending = (field: Cell): boolean =>
@@ -108,4 +108,9 @@ const showMines = (board: Board): void => {
     .forEach(field => (field.opened = true));
 };
 
-export {createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines};
+const invertFlag = (board: Board, row: number, column: number) => {
+  const field = board[row][column];
+  field.flagged = !field.flagged;
+};
+
+export {createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines, invertFlag};

@@ -18,16 +18,18 @@ type Board = Cell[][];
 interface MinefieldProps {
   board: Board;
   onOpenField: (row: number, column: number) => void;
+  onSelectField: (row: number, column: number) => void;
 }
 
-const Minefield: React.FC<MinefieldProps> = ({ board, onOpenField }) => {
+const Minefield: React.FC<MinefieldProps> = ({ board, onOpenField, onSelectField }) => {
   return (
     <View style={styles.container}>
       {board.map((row, r) => (
         <View key={r} style={styles.row}>
           {row.map((field, c) => (
             <Field {...field} key={`${r}-${c}`}
-             onOpen={() => onOpenField(r, c)}/>
+             onOpen={() => onOpenField(r, c)}
+             onSelect={() => onSelectField(r, c)}/>
           ))}
         </View>
       ))}

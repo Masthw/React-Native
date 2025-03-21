@@ -13,7 +13,7 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Minefield from './src/components/MineField';
-import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines } from './src/functions';
+import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines, invertFlag } from './src/functions';
 
 type GameState = {
   board: ReturnType<typeof createMinedBoard>;
@@ -57,6 +57,16 @@ function App(): React.JSX.Element {
     setGameState({ board, lost, won });
   };
 
+  const onSelectField = (row: number, column: number) => {
+    const board = cloneBoard(gameState.board);
+    invertFlag(board, row, column);
+    const won = wonGame(board);
+
+    if(won) {
+      Alert.alert('Parabéns', 'Você Venceu!');
+    }
+    setGameState({ board, won, lost: false });
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -78,7 +88,8 @@ function App(): React.JSX.Element {
           </Text>
           <View style={styles.board}>
             <Minefield board={gameState.board}
-            onOpenField={onOpenField}/>
+            onOpenField={onOpenField}
+            onSelectField={onSelectField}/>
           </View>
         </View>
       </ScrollView>

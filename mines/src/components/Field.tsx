@@ -11,6 +11,7 @@ interface FieldProps {
   exploded?: boolean;
   flagged?: boolean;
   onOpen?: () => void;
+  onSelect?: () => void;
 }
 
 const Field: React.FC<FieldProps> = ({
@@ -20,6 +21,7 @@ const Field: React.FC<FieldProps> = ({
   exploded = false,
   flagged = false,
   onOpen,
+  onSelect,
 }) => {
   const styleField: StyleProp<ViewStyle>[] = [styles.field];
 
@@ -50,7 +52,8 @@ const Field: React.FC<FieldProps> = ({
   }
 
   return (
-    <TouchableWithoutFeedback onPress={onOpen}>
+    <TouchableWithoutFeedback onPress={onOpen}
+    onLongPress={onSelect}>
       <View style={styleField}>
       {!mined && opened && nearMines > 0 ? (
         <Text style={[styles.label, {color}]}>{nearMines}</Text>
