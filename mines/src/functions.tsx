@@ -50,5 +50,62 @@ const createMinedBoard = (rows : number, columns : number, minesAmount : number)
     return board;
 };
 
+const cloneBoard = (board: Board): Board => {
+  return board.map(row => {
+    return row.map(cell => ({ ...cell }));
+  });
+};
 
-export {createMinedBoard};
+const getNeighbors = (board: Board, row: number, column: number): Cell[] => {
+  const neighbors: Cell[] = [];
+  const rows = [row - 1, row, row + 1];
+  const columns = [column - 1, column, column + 1];
+
+  rows.forEach(r => {
+    columns.forEach(c => {
+      const different = r !== row || c !== column;
+      const validRow = r >= 0 && r < board.length;
+      const validColumn = c >= 0 && c < board[0].length;
+      if (different && validRow && validColumn) {
+        neighbors.push(board[r][c]);
+      }
+    });
+  });
+
+  return neighbors;
+};
+
+const safeNeighborhood = (board : Board, row : number, column : number): boolean => {
+  return getNeighbors(board, row, column).reduce((result, neighbor) => result && !neighbor.mined, true);
+};
+
+const openField = (board : Board, row : number, column : number): void => {
+  const field = board[row][column];
+  if (!field.opened) {
+    field.opened = true;
+    if(field.mined) {
+      field.exploded = true;
+
+    } else if (safeNeighborhood(board, row, column)) {
+      getNeighbors(board, row, column).forEach(n => openField(board, n.row, n.column));
+    } else {
+      const neighbors = getNeighbors(board, row, column);
+      field.nearMines = neighbors.filter(n => n.mined).length;
+    }
+  }
+};
+
+const fields = (board : Board):Cell[] => board.flat();
+const hadExplosion = (board: Board): boolean =>
+  fields(board).some(field => field.exploded);
+const pending = (field: Cell): boolean =>
+  (field.mined && !field.flagged) || (!field.mined && !field.opened);
+const wonGame = (board: Board): boolean =>
+  fields(board).every(field => !pending(field));
+const showMines = (board: Board): void => {
+  fields(board)
+    .filter(field => field.mined)
+    .forEach(field => (field.opened = true));
+};
+
+export {createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines};

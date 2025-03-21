@@ -1,5 +1,5 @@
 import params from './src/params';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,10 +11,31 @@ import {
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import Field from './src/components/Field';
+import Minefield from './src/components/MineField';
+import { createMinedBoard } from './src/functions';
+
+type GameState = {
+  board: ReturnType<typeof createMinedBoard>;
+};
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+
+  const minesAmount = () => {
+    const cols = params.getColumnsAmount();
+    const rows = params.getRowsAmount();
+    return Math.ceil(cols * rows * params.difficultLevel);
+  };
+
+  const createGameState = (): GameState => {
+    const cols = params.getColumnsAmount();
+    const rows = params.getRowsAmount();
+    return {
+      board: createMinedBoard(rows, cols, minesAmount()),
+    };
+  };
+
+  const [gameState, setGameState] = useState<GameState>(createGameState);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -30,18 +51,13 @@ function App(): React.JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <View style={styles.container}>
-          <Text style={styles.welcome}>Iniciando o Mines!!!</Text>
           <Text style={styles.instructions}>
             Tamanho da grade: {params.getRowsAmount()}x
             {params.getColumnsAmount()}
           </Text>
-          <Field />
-          <Field opened />
-          <Field opened nearMines={7} />
-          <Field mined />
-          <Field opened mined exploded />
-          <Field flagged />
-          <Field flagged opened/>
+          <View style={styles.board}>
+            <Minefield board={gameState.board}/>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -51,13 +67,11 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'flex-end',
   },
-  welcome: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  board: {
+   alignItems: 'center',
+   backgroundColor: '#aaa',
   },
   instructions: {
     fontSize: 24,
