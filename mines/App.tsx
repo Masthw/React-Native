@@ -14,11 +14,13 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Minefield from './src/components/MineField';
 import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines, invertFlag, flagsUsed } from './src/functions';
 import Header from './src/components/Header';
+import LevelSelection from './src/screens/LevelSelection';
 
 type GameState = {
   board: ReturnType<typeof createMinedBoard>;
   won: boolean,
   lost: boolean,
+  showLevelSelection: boolean
 };
 
 function App(): React.JSX.Element {
@@ -37,6 +39,7 @@ function App(): React.JSX.Element {
       board: createMinedBoard(rows, cols, minesAmount()),
       won: false,
       lost: false,
+      showLevelSelection: false,
     };
   };
   const [gameState, setGameState] = useState<GameState>(createGameState);
@@ -54,7 +57,7 @@ function App(): React.JSX.Element {
     if (won) {
       Alert.alert('Parabéns', 'Você Venceu!');
     }
-    setGameState({ board, lost, won });
+    setGameState({ ...gameState, board, lost, won });
   };
 
   const onSelectField = (row: number, column: number) => {
@@ -65,12 +68,17 @@ function App(): React.JSX.Element {
     if(won) {
       Alert.alert('Parabéns', 'Você Venceu!');
     }
-    setGameState({ board, won, lost: false });
+    setGameState({...gameState, board, won, lost: false });
   };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+const onLevelSelected = (level: number) => {
+  params.difficultLevel = level;
+  setGameState(createGameState());
+};
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -82,7 +90,9 @@ function App(): React.JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <View style={styles.container}>
-          <Header flagsLeft={minesAmount() - flagsUsed(gameState.board)} onNewGame={() => setGameState(createGameState())} />
+          <LevelSelection isVisible={gameState.showLevelSelection} onLevelSelected={onLevelSelected}
+          onCancel={() => setGameState({...gameState, showLevelSelection: false})} />
+          <Header flagsLeft={minesAmount() - flagsUsed(gameState.board)} onNewGame={() => setGameState(createGameState())} onFlagPress={() => setGameState( {...gameState, showLevelSelection: true})} />
           <View style={styles.board}>
             <Minefield board={gameState.board}
             onOpenField={onOpenField}
