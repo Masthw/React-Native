@@ -5,7 +5,6 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   useColorScheme,
   View,
   Alert,
@@ -13,7 +12,8 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Minefield from './src/components/MineField';
-import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines, invertFlag } from './src/functions';
+import { createMinedBoard, cloneBoard, openField, hadExplosion, wonGame, showMines, invertFlag, flagsUsed } from './src/functions';
+import Header from './src/components/Header';
 
 type GameState = {
   board: ReturnType<typeof createMinedBoard>;
@@ -82,10 +82,7 @@ function App(): React.JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <View style={styles.container}>
-          <Text style={styles.instructions}>
-            Tamanho da grade: {params.getRowsAmount()}x
-            {params.getColumnsAmount()}
-          </Text>
+          <Header flagsLeft={minesAmount() - flagsUsed(gameState.board)} onNewGame={() => setGameState(createGameState())} />
           <View style={styles.board}>
             <Minefield board={gameState.board}
             onOpenField={onOpenField}

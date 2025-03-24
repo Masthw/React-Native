@@ -21,6 +21,7 @@ const Flag: React.FC<FlagProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginTop: 2,
+    height: 32,
   },
   flagpole: {
     position: 'absolute',
