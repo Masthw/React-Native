@@ -1,11 +1,15 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import CentralText from './components/CentralText';
+import ScreenA from './views/ScreenA';
+import ScreenB from './views/ScreenB';
+import ScreenC from './views/ScreenC';
 
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <CentralText>App</CentralText>
+     <ScreenA />
+     <ScreenB />
+     <ScreenC />
     </SafeAreaView>
   );
 };
