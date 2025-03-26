@@ -22,12 +22,18 @@ const StackNavigator: React.FC = () => {
       </Stack.Screen>
       <Stack.Screen name="ScreenB">
         {() => (
-          <StackStep advance="ScreenC">
+          <StackStep advance="ScreenC" goBack>
             <ScreenB />
           </StackStep>
         )}
       </Stack.Screen>
-      <Stack.Screen name="ScreenC" component={ScreenC} />
+      <Stack.Screen name="ScreenC">
+        {() => (
+          <StackStep advance="ScreenC" goBack>
+            <ScreenC />
+          </StackStep>
+        )}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };
