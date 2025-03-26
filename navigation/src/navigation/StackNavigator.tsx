@@ -10,7 +10,7 @@ const StackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       initialRouteName="ScreenA"
-      screenOptions={{headerShown: false}}>
+      screenOptions={{headerShown: true}}>
       <Stack.Screen
         name="ScreenA"
         options={{title: 'Informações Iniciais'}}

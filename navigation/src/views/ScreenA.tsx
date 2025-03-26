@@ -1,14 +1,21 @@
 import React from 'react';
 import CentralText from '../components/CentralText';
+import {useNavigation} from '@react-navigation/native';
+import {Button} from 'react-native';
+import { NavigationProp } from '../types';
 
-interface ScreenAProps {
+const ScreenA: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
 
-}
-
-const ScreenA: React.FC<ScreenAProps> = () => {
-    return (
-        <CentralText backgroundColor="#e53935">Screen A</CentralText>
-    );
+  return (
+    <>
+      <CentralText backgroundColor="#e53935">Screen A</CentralText>
+      <Button
+        title="Ir para Screen B"
+        onPress={() => navigation.navigate('ScreenB')}
+      />
+    </>
+  );
 };
 
 export default ScreenA;
