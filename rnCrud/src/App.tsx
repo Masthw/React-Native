@@ -7,7 +7,12 @@ import UserForm from './views/UserForm';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  UserList: undefined;
+  UserForm: { user?: { id: string; name: string; email: string; avatar: string } };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
   return (
