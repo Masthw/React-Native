@@ -1,24 +1,19 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {RouteProp} from '@react-navigation/native';
-import {TextInput} from 'react-native-gesture-handler';
+import React, {useState, useEffect, useContext} from 'react';
+import {View, Text, StyleSheet, TextInput} from 'react-native';
 import {Button} from 'react-native-elements';
+import UsersContext from '../context/UsersContext';
 
-type RootStackParamList = {
-  UserList: undefined;
-  UserForm: {user?: {id: string; name: string; email: string; avatar: string}};
-};
-
-type UserFormRouteProp = RouteProp<RootStackParamList, 'UserForm'>;
-
-interface Props {
-  route: UserFormRouteProp;
-  navigation: any;
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  avatar: string;
 }
 
-const UserForm: React.FC<Props> = ({route, navigation}) => {
+const UserForm = ({route, navigation}: {route: any; navigation: any}) => {
+  const usersContext = useContext(UsersContext);
   const [user, setUser] = useState(
-    route.params?.user || {id: '', name: '', email: '', avatar: ''},
+    route.params?.user || {id: 0, name: '', email: '', avatar: ''},
   );
 
   useEffect(() => {
@@ -27,11 +22,34 @@ const UserForm: React.FC<Props> = ({route, navigation}) => {
     }
   }, [route.params]);
 
+  if (!usersContext) {
+    return null;
+  }
+
+  const {dispatch} = usersContext;
+
+  const saveUser = () => {
+    if (user.id) {
+      dispatch({type: 'EDIT_USER', payload: user});
+    } else {
+      let newId : number;
+      do {
+        newId = Math.floor(Math.random() * 1000);
+      } while (user.some((u: User) => u.id === newId));
+
+      dispatch({
+        type: 'ADD_USER',
+        payload: {...user, id: newId},
+      });
+    }
+    navigation.goBack();
+  };
+
   return (
-    <View style={style.form}>
+    <View style={styles.form}>
       <Text>Nome</Text>
       <TextInput
-        style={style.input}
+        style={styles.input}
         onChangeText={text => setUser({...user, name: text})}
         placeholder="Informe o Nome"
         value={user.name}
@@ -39,29 +57,26 @@ const UserForm: React.FC<Props> = ({route, navigation}) => {
 
       <Text>Email</Text>
       <TextInput
-        style={style.input}
+        style={styles.input}
         onChangeText={text => setUser({...user, email: text})}
         placeholder="Informe o Email"
         value={user.email}
       />
+
       <Text>Url do Avatar</Text>
       <TextInput
-        style={style.input}
+        style={styles.input}
         onChangeText={text => setUser({...user, avatar: text})}
-        placeholder="Informe o Email"
+        placeholder="Informe o Avatar"
         value={user.avatar}
       />
-      <Button
-        title={'Salvar'}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
+
+      <Button buttonStyle={styles.button} title="Salvar" onPress={saveUser} />
     </View>
   );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   form: {
     padding: 15,
   },
@@ -70,6 +85,10 @@ const style = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#f4511e',
+    borderRadius: 5,
   },
 });
 
