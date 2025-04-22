@@ -7,16 +7,20 @@ import {
   View,
 } from 'react-native';
 import Author from './Author';
+import Comments from './Comments';
+import { CommentItem } from './Comments';
 
 type Props = {
   image: ImageSourcePropType;
+  comments: CommentItem[];
 };
 
-const Post: React.FC<Props> = ({image}) => {
+const Post: React.FC<Props> = ({image, comments}) => {
   return (
     <View style={styles.container}>
       <Image source={image} style={styles.image} />
       <Author email="maverick17xd@gmail.com" nickname="Lucas Campanharo" />
+      <Comments comments={comments} />
     </View>
   );
 };
