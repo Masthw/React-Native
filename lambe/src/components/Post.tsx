@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Dimensions,
   Image,
@@ -11,15 +11,13 @@ type Props = {
   image: ImageSourcePropType;
 };
 
-class Post extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Image source={this.props.image} style={styles.image} />
-      </View>
-    );
-  }
-}
+const Post: React.FC<Props> = ({image}) => {
+  return (
+    <View style={styles.container}>
+      <Image source={image} style={styles.image} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
