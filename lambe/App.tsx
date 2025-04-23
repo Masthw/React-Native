@@ -1,19 +1,11 @@
 import React from 'react';
-import Header from './src/components/Header';
 import {StyleSheet, View} from 'react-native';
-import Post from './src/components/Post';
+import Feed from './src/screens/Feed';
 
 function App(): React.JSX.Element {
   return (
     <View style={styles.container}>
-      <Header />
-      <Post
-        image={require('./assets/imgs/fence.jpg')}
-        comments={[
-          {nickname: 'joao_dev', comment: 'Post irado!'},
-          {nickname: 'maria123', comment: 'Muito bom, parabéns!'},
-        ]}
-      />
+    <Feed />
     </View>
   );
 }
