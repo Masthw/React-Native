@@ -20,3 +20,8 @@ declare module 'react-native-gravatar' {
   export class Gravatar extends React.Component<GravatarProps> {}
 }
 
+declare module 'react-native-vector-icons/FontAwesome' {
+  import { Icon } from 'react-native-vector-icons/Icon';
+  export default Icon;
+}
+
