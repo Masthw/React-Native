@@ -1,11 +1,11 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import Feed from './src/screens/Feed';
+import AppNavigator from './src/Navigator';
 
 function App(): React.JSX.Element {
   return (
     <View style={styles.container}>
-    <Feed />
+   <AppNavigator />
     </View>
   );
 }
