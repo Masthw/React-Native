@@ -6,16 +6,24 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Feed from './screens/Feed';
 import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AddPhoto from './screens/AddPhoto';
 import Profile from './screens/Profile';
+import Login from './screens/Login';
 
-type TabParamList = {
+export type TabParamList = {
   Feed: undefined;
   AddPhoto: undefined;
   Profile: undefined;
 };
 
+export type RootStackParamList = {
+  Login: undefined;
+  HomeTabs: undefined;
+};
+
 const Tab = createBottomTabNavigator<TabParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const screenOptions = ({
   route,
@@ -40,26 +48,29 @@ const screenOptions = ({
   };
 };
 
+const HomeTabs = () => (
+  <Tab.Navigator initialRouteName="Feed" screenOptions={screenOptions}>
+    <Tab.Screen name="Feed" component={Feed} options={{headerShown: false}} />
+    <Tab.Screen
+      name="AddPhoto"
+      component={AddPhoto}
+      options={{headerShown: false}}
+    />
+    <Tab.Screen
+      name="Profile"
+      component={Profile}
+      options={{headerShown: false}}
+    />
+  </Tab.Navigator>
+);
+
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="Feed" screenOptions={screenOptions}>
-        <Tab.Screen
-          name="Feed"
-          component={Feed}
-          options={{headerShown: false}}
-        />
-        <Tab.Screen
-          name="AddPhoto"
-          component={AddPhoto}
-          options={{headerShown: false}}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{headerShown: false}}
-        />
-      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="HomeTabs" component={HomeTabs} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

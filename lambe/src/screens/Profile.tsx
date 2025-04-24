@@ -1,11 +1,19 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Gravatar} from 'react-native-gravatar';
+import { RootStackParamList } from '../Navigator';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
+type ProfileScreenProp = NativeStackNavigationProp<RootStackParamList, 'HomeTabs'>;
 
 const Profile: React.FC = () => {
+    const navigation = useNavigation<ProfileScreenProp>();
   const options = {email: 'example@test.gmail.com', secure: true};
 
-  const logout = () => {};
+  const logout = () => {
+    navigation.navigate('Login');
+  };
 
   return (
     <View style={styles.container}>
