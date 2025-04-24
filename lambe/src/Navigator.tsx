@@ -6,6 +6,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Feed from './screens/Feed';
 import {NavigationContainer} from '@react-navigation/native';
+import AddPhoto from './screens/AddPhoto';
 
 type TabParamList = {
   Feed: undefined;
@@ -49,7 +50,7 @@ const AppNavigator = () => {
         />
         <Tab.Screen
           name="AddPhoto"
-          component={Feed}
+          component={AddPhoto}
           options={{headerShown: false}}
         />
         <Tab.Screen

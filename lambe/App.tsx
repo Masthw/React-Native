@@ -1,12 +1,15 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import AppNavigator from './src/Navigator';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   return (
-    <View style={styles.container}>
-   <AppNavigator />
-    </View>
+    <GestureHandlerRootView style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <AppNavigator />
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 
