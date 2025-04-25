@@ -3,16 +3,29 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {RootStackParamList} from '../Navigator';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {connect} from 'react-redux';
+import {login as loginAction} from '../store/actions/user';
+import { User } from '../types/User';
+
 
 type LoginScreenProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
-const Login: React.FC = () => {
+interface Props {
+  onLogin: (user: User) => void;
+}
+
+const Login: React.FC<Props> = ({onLogin}) => {
   const navigation = useNavigation<LoginScreenProp>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const login = () => {
+  const handleLogin = () => {
+    onLogin({
+      name: 'Usuário',
+      email,
+      token: 'fake-token',
+    });
     navigation.navigate('HomeTabs');
   };
   const signup = () => {
@@ -36,7 +49,7 @@ const Login: React.FC = () => {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity onPress={login} style={styles.button}>
+      <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={signup} style={styles.button}>
@@ -71,4 +84,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    onLogin: (user: User) => dispatch(loginAction(user)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Login);

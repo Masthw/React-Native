@@ -4,23 +4,32 @@ import {Gravatar} from 'react-native-gravatar';
 import { RootStackParamList } from '../Navigator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { connect } from 'react-redux';
+import { logout as logoutAction} from '../store/actions/user';
+import { User } from '../types/User';
 
 type ProfileScreenProp = NativeStackNavigationProp<RootStackParamList, 'HomeTabs'>;
 
-const Profile: React.FC = () => {
-    const navigation = useNavigation<ProfileScreenProp>();
-  const options = {email: 'example@test.gmail.com', secure: true};
+interface Props {
+  user: User;
+  onLogout: () => void;
+}
 
-  const logout = () => {
+const Profile: React.FC<Props> = ({user, onLogout}) => {
+    const navigation = useNavigation<ProfileScreenProp>();
+    const options = {email: user?.email || '', secure: true};
+
+  const handleLogout = () => {
+    onLogout();
     navigation.navigate('Login');
   };
 
   return (
     <View style={styles.container}>
       <Gravatar options={options} style={styles.avatar} />
-      <Text style={styles.nickname}>Fulano de tal</Text>
-      <Text style={styles.email}>fulanodetal@gmail.com</Text>
-      <TouchableOpacity onPress={logout} style={styles.button}>
+      <Text style={styles.nickname}>{user?.name}</Text>
+      <Text style={styles.email}>{user?.email}</Text>
+      <TouchableOpacity onPress={handleLogout} style={styles.button}>
         <Text style={styles.buttonText}>Sair</Text>
       </TouchableOpacity>
     </View>
@@ -58,4 +67,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+const mapStateToProps = (state: any) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = {
+  onLogout: logoutAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
