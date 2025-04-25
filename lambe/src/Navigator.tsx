@@ -10,6 +10,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AddPhoto from './screens/AddPhoto';
 import Profile from './screens/Profile';
 import Login from './screens/Login';
+import Register from './screens/Register';
 
 export type TabParamList = {
   Feed: undefined;
@@ -19,6 +20,7 @@ export type TabParamList = {
 
 export type RootStackParamList = {
   Login: undefined;
+  Register: undefined;
   HomeTabs: undefined;
 };
 
@@ -69,6 +71,11 @@ const AppNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{headerShown: true, title: 'Registrar'}}
+        />
         <Stack.Screen name="HomeTabs" component={HomeTabs} />
       </Stack.Navigator>
     </NavigationContainer>

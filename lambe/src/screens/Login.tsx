@@ -15,7 +15,9 @@ const Login: React.FC = () => {
   const login = () => {
     navigation.navigate('HomeTabs');
   };
-  const signup = () => {};
+  const signup = () => {
+    navigation.navigate('Register');
+  };
 
   return (
     <View style={styles.container}>
