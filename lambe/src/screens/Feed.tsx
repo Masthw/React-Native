@@ -2,33 +2,29 @@ import React from 'react';
 import Header from '../components/Header';
 import {ScrollView, StyleSheet} from 'react-native';
 import Post from '../components/Post';
-import {CommentItem} from '../components/Comments';
+import { connect } from 'react-redux';
+import { Post as PostType } from '../types/Post';
 
-const mockComments: CommentItem[] = [
-  {nickname: 'Lucas', comment: 'mto bom!'},
-  {nickname: 'Maria', comment: 'top top'},
-];
 
-const Feed: React.FC = () => {
+interface Props {
+  posts: PostType[];
+}
+
+const Feed: React.FC<Props> = ({posts}) => {
   return (
     <>
       <Header />
       <ScrollView style={styles.container}>
-        <Post
-          image={require('../../assets/imgs/fence.jpg')}
-          comments={mockComments}
-          postId={1}
+      {posts.map(post => (
+          <Post
+          key={post.id}
+          image={typeof post.image === 'string' ? { uri: post.image } : post.image}
+          comments={post.comments}
+          postId={post.id}
+          nickname={post.nickname}
+          email={post.email}
         />
-        <Post
-          image={require('../../assets/imgs/bw.jpg')}
-          comments={[]}
-          postId={2}
-        />
-         <Post
-          image={require('../../assets/imgs/boat.jpg')}
-          comments={[]}
-          postId={3}
-        />
+        ))}
       </ScrollView>
     </>
   );
@@ -42,4 +38,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Feed;
+const mapStateToProps = (state: any) => ({
+  posts: state.posts,
+});
+
+export default connect(mapStateToProps)(Feed);

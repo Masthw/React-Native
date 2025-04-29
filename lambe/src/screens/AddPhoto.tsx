@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {connect} from 'react-redux';
+import {addPost} from '../store/actions/posts';
 import {
   View,
   Image,
@@ -11,18 +13,22 @@ import {
 } from 'react-native';
 import {ScrollView, Text, TextInput} from 'react-native-gesture-handler';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import {Post} from '../types/Post';
 
-const AddPhoto: React.FC = () => {
+interface Props {
+  onAddPost: (post: Post) => void;
+}
+
+const AddPhoto: React.FC<Props> = ({onAddPost}) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
 
   const handleImageResponse = (response: any) => {
-    if (response.didCancel) {
-      console.log('User cancelled image picker');
-    } else if (response.errorCode) {
-      console.log('ImagePicker Error: ', response.errorMessage);
-    } else if (response.assets && response.assets.length > 0) {
-      setImageUri(response.assets[0].uri || null);
+    if (response.didCancel || response.errorCode) {
+      return;
+    }
+    if (response.assets?.[0]?.uri) {
+      setImageUri(response.assets[0].uri);
     }
   };
 
@@ -85,16 +91,22 @@ const AddPhoto: React.FC = () => {
 
   const save = () => {
     if (!imageUri) {
-      console.log('Nenhuma imagem selecionada.');
+      Alert.alert('Erro', 'Você precisa selecionar uma imagem!');
       return;
     }
 
-    console.log('Salvando imagem e comentário...');
-    console.log('Imagem URI:', imageUri);
-    console.log('Comentário:', comment);
+    const newPost: Post = {
+      id: Math.random().toString(),
+      image: {uri: imageUri},
+      email: 'maverick17xd@gmail.com',
+      nickname: 'Lucas Campanharo',
+      comments: comment ? [{nickname: 'Lucas Campanharo', comment}] : [],
+    };
 
+    onAddPost(newPost);
     setImageUri(null);
     setComment('');
+    Alert.alert('Sucesso', 'Post adicionado!');
   };
 
   return (
@@ -166,4 +178,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddPhoto;
+const mapDispatchToProps = {
+  onAddPost: addPost,
+};
+
+export default connect(null, mapDispatchToProps)(AddPhoto);

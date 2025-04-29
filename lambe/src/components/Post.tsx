@@ -12,16 +12,18 @@ import { CommentItem } from './Comments';
 import AddComment from './AddComment';
 
 type Props = {
-  postId: number;
+  postId: string;
   image: ImageSourcePropType;
   comments: CommentItem[];
+  nickname: string;
+  email: string;
 };
 
-const Post: React.FC<Props> = ({image, comments, postId}) => {
+const Post: React.FC<Props> = ({ image, comments, postId, nickname, email }) => {
   return (
     <View style={styles.container}>
       <Image source={image} style={styles.image} />
-      <Author email="maverick17xd@gmail.com" nickname="Lucas Campanharo" />
+      <Author email={email} nickname={nickname} />
       <Comments comments={comments} />
       <AddComment postId={postId} />
     </View>

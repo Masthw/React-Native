@@ -9,7 +9,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 type AddCommentProps = {
-  postId: number;
+  postId: string;
 };
 
 const AddComment: React.FC<AddCommentProps> = ({postId}) => {
