@@ -14,12 +14,14 @@ import {
 import {ScrollView, Text, TextInput} from 'react-native-gesture-handler';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {Post} from '../types/Post';
+import { User } from '../types/User';
 
 interface Props {
+  user: User;
   onAddPost: (post: Post) => void;
 }
 
-const AddPhoto: React.FC<Props> = ({onAddPost}) => {
+const AddPhoto: React.FC<Props> = ({user, onAddPost}) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
 
@@ -98,9 +100,9 @@ const AddPhoto: React.FC<Props> = ({onAddPost}) => {
     const newPost: Post = {
       id: Math.random().toString(),
       image: {uri: imageUri},
-      email: 'maverick17xd@gmail.com',
-      nickname: 'Lucas Campanharo',
-      comments: comment ? [{nickname: 'Lucas Campanharo', comment}] : [],
+      email: user.email!,
+      nickname: user.name!,
+      comments: comment ? [{nickname: user.name!, comment}] : [],
     };
 
     onAddPost(newPost);
@@ -178,8 +180,12 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = (state: any) => ({
+  user: state.user,
+});
+
 const mapDispatchToProps = {
   onAddPost: addPost,
 };
 
-export default connect(null, mapDispatchToProps)(AddPhoto);
+export default connect(mapStateToProps, mapDispatchToProps)(AddPhoto);
