@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import RNFS from 'react-native-fs';
 import {connect} from 'react-redux';
 import {addPost} from '../store/actions/posts';
 import {
@@ -25,12 +26,23 @@ const AddPhoto: React.FC<Props> = ({user, onAddPost}) => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [comment, setComment] = useState<string>('');
 
-  const handleImageResponse = (response: any) => {
+  const handleImageResponse = async (response: any) => {
     if (response.didCancel || response.errorCode) {
       return;
     }
-    if (response.assets?.[0]?.uri) {
-      setImageUri(response.assets[0].uri);
+
+    const asset = response.assets?.[0];
+    if (!asset?.uri) {
+      return;
+    }
+
+    try {
+      const base64 = await RNFS.readFile(asset.uri, 'base64');
+      const base64Uri = `data:${asset.type};base64,${base64}`;
+      setImageUri(base64Uri);
+    } catch (err) {
+      console.error('Erro ao converter imagem para base64:', err);
+      Alert.alert('Erro', 'Não foi possível processar a imagem.');
     }
   };
 
@@ -58,7 +70,7 @@ const AddPhoto: React.FC<Props> = ({user, onAddPost}) => {
   };
 
   const selectImage = async () => {
-  /*   if (!user.name || user.name === 'Usuário') {
+    /*   if (!user.name || user.name === 'Usuário') {
       Alert.alert('Erro', 'Você precisa estar logado para postar uma foto!');
       return;
     } */
@@ -96,7 +108,7 @@ const AddPhoto: React.FC<Props> = ({user, onAddPost}) => {
   };
 
   const save = () => {
-  /*   if (!user.name || user.name === 'Usuário') {
+    /*   if (!user.name || user.name === 'Usuário') {
       Alert.alert('Erro', 'Você precisa estar logado para postar uma foto!');
       return;
     } */
