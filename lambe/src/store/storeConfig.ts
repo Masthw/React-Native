@@ -1,14 +1,15 @@
-import { createStore, combineReducers} from 'redux';
+import {configureStore} from '@reduxjs/toolkit';
 import userReducer from './reducers/user';
 import postReducer from './reducers/posts';
 
-const reducers = combineReducers({
+const store = configureStore({
+  reducer: {
     user: userReducer,
     posts: postReducer,
+  },
 });
 
-const storeConfig = () => {
-    return createStore(reducers);
-};
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export default storeConfig;
+export default () => store;
