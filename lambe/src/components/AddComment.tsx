@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {addComment} from '../store/actions/posts';
 import {
+  Alert,
   Keyboard,
   StyleSheet,
   TextInput,
@@ -29,6 +30,9 @@ const AddComment: React.FC<AddCommentProps> = ({
   const [comment, setComment] = useState('');
 
   const handleAddComment = () => {
+    if (!user.name) {
+      return Alert.alert('Você precisa estar logado para comentar.');
+    }
     if (comment.trim()) {
       onAddComment(postId, {
         nickname: user.name,
