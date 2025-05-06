@@ -14,7 +14,7 @@ import {
 import {ScrollView, Text, TextInput} from 'react-native-gesture-handler';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {Post} from '../types/Post';
-import { User } from '../types/User';
+import {User} from '../types/User';
 
 interface Props {
   user: User;
@@ -58,6 +58,10 @@ const AddPhoto: React.FC<Props> = ({user, onAddPost}) => {
   };
 
   const selectImage = async () => {
+    if (!user.name || user.name === 'Usuário') {
+      Alert.alert('Erro', 'Você precisa estar logado para postar uma foto!');
+      return;
+    }
     Alert.alert('Selecionar imagem', 'Escolha a origem da imagem', [
       {
         text: 'Tirar Foto',
@@ -92,6 +96,10 @@ const AddPhoto: React.FC<Props> = ({user, onAddPost}) => {
   };
 
   const save = () => {
+    if (!user.name || user.name === 'Usuário') {
+      Alert.alert('Erro', 'Você precisa estar logado para postar uma foto!');
+      return;
+    }
     if (!imageUri) {
       Alert.alert('Erro', 'Você precisa selecionar uma imagem!');
       return;
