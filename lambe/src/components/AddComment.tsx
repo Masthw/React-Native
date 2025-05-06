@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {connect} from 'react-redux';
+import {addComment} from '../store/actions/posts';
 import {
   Keyboard,
   StyleSheet,
@@ -10,14 +12,28 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 type AddCommentProps = {
   postId: string;
+  user: {
+    name: string;
+  };
+  onAddComment: (
+    postId: string,
+    comment: {nickname: string; comment: string},
+  ) => void;
 };
 
-const AddComment: React.FC<AddCommentProps> = ({postId}) => {
+const AddComment: React.FC<AddCommentProps> = ({
+  postId,
+  user,
+  onAddComment,
+}) => {
   const [comment, setComment] = useState('');
 
   const handleAddComment = () => {
     if (comment.trim()) {
-      postId;
+      onAddComment(postId, {
+        nickname: user.name,
+        comment,
+      });
       setComment('');
       Keyboard.dismiss();
     }
@@ -75,4 +91,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddComment;
+const mapStateToProps = (state: any) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = {
+  onAddComment: addComment,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddComment);

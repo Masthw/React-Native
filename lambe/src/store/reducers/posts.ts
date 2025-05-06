@@ -1,5 +1,5 @@
 import {Post} from '../../types/Post';
-import {ADD_POST} from '../actions/actionTypes';
+import {ADD_POST, ADD_COMMENT} from '../actions/actionTypes';
 import fence from '../../../assets/imgs/fence.jpg';
 import boat from '../../../assets/imgs/boat.jpg';
 
@@ -27,6 +27,17 @@ const postReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case ADD_POST:
       return [...state, action.payload];
+    case ADD_COMMENT:
+      const {postId, comment} = action.payload;
+      return state.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            comments: [...post.comments, comment],
+          };
+        }
+        return post;
+      });
     default:
       return state;
   }
